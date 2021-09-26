@@ -87,41 +87,60 @@ public class PropertySourceBootstrapConfiguration
 
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
+		// 复合属性源集合
 		List<PropertySource<?>> composite = new ArrayList<>();
+		// 排序propertySourceLocators
 		AnnotationAwareOrderComparator.sort(this.propertySourceLocators);
+		// 是否空
 		boolean empty = true;
+		// 获取环境对象
 		ConfigurableEnvironment environment = applicationContext.getEnvironment();
+		// 对单个属性源加载器进行处理
 		for (PropertySourceLocator locator : this.propertySourceLocators) {
+			// 属性源加载器加载数据
 			Collection<PropertySource<?>> source = locator.locateCollection(environment);
+			// 加载数据结果为空跳过处理
 			if (source == null || source.size() == 0) {
 				continue;
 			}
+			// 创建属性源集合
 			List<PropertySource<?>> sourceList = new ArrayList<>();
+			// 对属性源加载器加载的属性进行循环,根据不同数据类型重新包装后放入属性源集合中
 			for (PropertySource<?> p : source) {
 				if (p instanceof EnumerablePropertySource) {
 					EnumerablePropertySource<?> enumerable = (EnumerablePropertySource<?>) p;
 					sourceList.add(new BootstrapPropertySource<>(enumerable));
-				}
-				else {
+				} else {
 					sourceList.add(new SimpleBootstrapPropertySource(p));
 				}
 			}
 			logger.info("Located property source: " + sourceList);
+			// 加入到复合属性源集合中
 			composite.addAll(sourceList);
+			// 空标志设置为false
 			empty = false;
 		}
+		// 如果非空
 		if (!empty) {
+			// 从环境对象中获取属性源集合
 			MutablePropertySources propertySources = environment.getPropertySources();
+			// 解析日志配置
 			String logConfig = environment.resolvePlaceholders("${logging.config:}");
+			// 获取日志文件
 			LogFile logFile = LogFile.get(environment);
+			// 循环环境对象中的属性源数据，将名称以"bootstrapProperties"开头的移除
 			for (PropertySource<?> p : environment.getPropertySources()) {
 				if (p.getName().startsWith(BOOTSTRAP_PROPERTY_SOURCE_NAME)) {
 					propertySources.remove(p.getName());
 				}
 			}
+			// 插入复合属性源
 			insertPropertySources(propertySources, composite);
+			// 重新初始化日志
 			reinitializeLoggingSystem(environment, logConfig, logFile);
+			// 设置日志级别
 			setLogLevels(applicationContext, environment);
+			// 处理导入的配置
 			handleIncludedProfiles(environment);
 		}
 	}

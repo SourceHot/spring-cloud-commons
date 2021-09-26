@@ -61,8 +61,7 @@ public interface PropertySourceLocator {
 				}
 			}
 			return filteredSources;
-		}
-		else {
+		} else {
 			return Arrays.asList(propertySource);
 		}
 	}

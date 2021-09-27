@@ -48,20 +48,28 @@ public interface PropertySourceLocator {
 	}
 
 	static Collection<PropertySource<?>> locateCollection(PropertySourceLocator locator, Environment environment) {
+		// 通过PropertySourceLocator对象的locate方法加载属性源
 		PropertySource<?> propertySource = locator.locate(environment);
+		// 属性源为空返回空集合
 		if (propertySource == null) {
 			return Collections.emptyList();
 		}
+		// 确认属性源是否是CompositePropertySource的实例,如果不是则直接将其转换为Collection类型后返回
 		if (CompositePropertySource.class.isInstance(propertySource)) {
+			// 获取属性源集合
 			Collection<PropertySource<?>> sources = ((CompositePropertySource) propertySource).getPropertySources();
+			// 创建返回对象
 			List<PropertySource<?>> filteredSources = new ArrayList<>();
+			// 从属性源集合中循环，过滤空数据将其放入返回对象
 			for (PropertySource<?> p : sources) {
 				if (p != null) {
 					filteredSources.add(p);
 				}
 			}
+			// 返回
 			return filteredSources;
-		} else {
+		}
+		else {
 			return Arrays.asList(propertySource);
 		}
 	}

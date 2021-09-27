@@ -45,11 +45,17 @@ public abstract class SpringFactoryImportSelector<T>
 		implements DeferredImportSelector, BeanClassLoaderAware, EnvironmentAware {
 
 	private final Log log = LogFactory.getLog(SpringFactoryImportSelector.class);
-
+	/**
+	 * 类加载器
+	 */
 	private ClassLoader beanClassLoader;
-
+	/**
+	 * 注解类
+	 */
 	private Class<T> annotationClass;
-
+	/**
+	 * 环境对象
+	 */
 	private Environment environment;
 
 	@SuppressWarnings("unchecked")
@@ -60,24 +66,30 @@ public abstract class SpringFactoryImportSelector<T>
 
 	@Override
 	public String[] selectImports(AnnotationMetadata metadata) {
+		// 确认是否启动，如果未启动则返回空数组
 		if (!isEnabled()) {
 			return new String[0];
 		}
+		// 获取EnableDiscoveryClient注解属性表
 		AnnotationAttributes attributes = AnnotationAttributes
 				.fromMap(metadata.getAnnotationAttributes(this.annotationClass.getName(), true));
 
+		// 属性表数据为空抛出异常
 		Assert.notNull(attributes, "No " + getSimpleName() + " attributes found. Is " + metadata.getClassName()
 				+ " annotated with @" + getSimpleName() + "?");
 
 		// Find all possible auto configuration classes, filtering duplicates
+		// 加载spring.factories文件中EnableDiscoveryClient注解对应的类名
 		List<String> factories = new ArrayList<>(new LinkedHashSet<>(
 				SpringFactoriesLoader.loadFactoryNames(this.annotationClass, this.beanClassLoader)));
 
+		// factories集合为空并且没有默认工厂抛出异常
 		if (factories.isEmpty() && !hasDefaultFactory()) {
 			throw new IllegalStateException("Annotation @" + getSimpleName()
 					+ " found, but there are no implementations. Did you forget to include a starter?");
 		}
 
+		// factories数量超过1将输出日志
 		if (factories.size() > 1) {
 			// there should only ever be one DiscoveryClient, but there might be more than
 			// one factory
@@ -85,6 +97,7 @@ public abstract class SpringFactoryImportSelector<T>
 					+ " (now relying on @Conditionals to pick one): " + factories);
 		}
 
+		// 将factories数据转换成数组返回
 		return factories.toArray(new String[factories.size()]);
 	}
 
@@ -92,6 +105,9 @@ public abstract class SpringFactoryImportSelector<T>
 		return false;
 	}
 
+	/**
+	 * 确认是否已启用
+	 */
 	protected abstract boolean isEnabled();
 
 	protected String getSimpleName() {

@@ -29,19 +29,33 @@ import java.util.Objects;
  * @author Charu Covindane
  */
 public class DefaultServiceInstance implements ServiceInstance {
-
+	/**
+	 * 实例id
+	 */
 	private String instanceId;
-
+	/**
+	 * 服务id
+	 */
 	private String serviceId;
-
+	/**
+	 * host
+	 */
 	private String host;
-
+	/**
+	 * port
+	 */
 	private int port;
-
+	/**
+	 * 是否安全标记
+	 */
 	private boolean secure;
-
+	/**
+	 * 原属性
+	 */
 	private Map<String, String> metadata = new LinkedHashMap<>();
-
+	/**
+	 * uri地址
+	 */
 	private URI uri;
 
 	/**

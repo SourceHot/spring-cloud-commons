@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationEvent;
  * from the discovery server. Provides listeners with a basic indication of a state change
  * in the service catalog.
  *
+ * 心跳事件
  * @author Spencer Gibb
  * @author Dave Syer
  */

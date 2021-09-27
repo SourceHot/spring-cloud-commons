@@ -25,6 +25,7 @@ import org.springframework.core.Ordered;
  * Represents read operations commonly available to discovery services such as Netflix
  * Eureka or consul.io.
  *
+ * 服务发现器
  * @author Spencer Gibb
  * @author Olga Maciaszek-Sharma
  * @author Chris Bono
@@ -33,23 +34,27 @@ public interface DiscoveryClient extends Ordered {
 
 	/**
 	 * Default order of the discovery client.
+	 * 默认序号
 	 */
 	int DEFAULT_ORDER = 0;
 
 	/**
 	 * A human-readable description of the implementation, used in HealthIndicator.
+	 * 获取描述
 	 * @return The description.
 	 */
 	String description();
 
 	/**
 	 * Gets all ServiceInstances associated with a particular serviceId.
+	 * 根据服务id获取服务实例集合
 	 * @param serviceId The serviceId to query.
 	 * @return A List of ServiceInstance.
 	 */
 	List<ServiceInstance> getInstances(String serviceId);
 
 	/**
+	 * 获取所有服务实例id
 	 * @return All known service IDs.
 	 */
 	List<String> getServices();
@@ -62,6 +67,7 @@ public interface DiscoveryClient extends Ordered {
 	 * <p>
 	 * The default implementation simply calls {@link #getServices()} - client
 	 * implementations can override with a lighter weight operation if they choose to.
+	 * 探测接口
 	 */
 	default void probe() {
 		getServices();
@@ -69,6 +75,7 @@ public interface DiscoveryClient extends Ordered {
 
 	/**
 	 * Default implementation for getting order of discovery clients.
+	 * 获取序号
 	 * @return order
 	 */
 	@Override

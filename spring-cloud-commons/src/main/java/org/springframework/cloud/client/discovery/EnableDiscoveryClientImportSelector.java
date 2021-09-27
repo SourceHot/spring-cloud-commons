@@ -38,25 +38,37 @@ public class EnableDiscoveryClientImportSelector extends SpringFactoryImportSele
 
 	@Override
 	public String[] selectImports(AnnotationMetadata metadata) {
+		// 获取需要导入的类名集合
 		String[] imports = super.selectImports(metadata);
 
+		// 获取EnableDiscoveryClient注解的属性表
 		AnnotationAttributes attributes = AnnotationAttributes
 				.fromMap(metadata.getAnnotationAttributes(getAnnotationClass().getName(), true));
 
+		// 获取是否需要自动注入属性
 		boolean autoRegister = attributes.getBoolean("autoRegister");
 
+		// 如果需要自动注入则会添加AutoServiceRegistrationConfiguration类
 		if (autoRegister) {
 			List<String> importsList = new ArrayList<>(Arrays.asList(imports));
 			importsList.add("org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationConfiguration");
 			imports = importsList.toArray(new String[0]);
 		}
+		// 如果不需要自动注入
 		else {
+			// 获取环境对象
 			Environment env = getEnvironment();
+			// 确认环境对象是ConfigurableEnvironment类型
 			if (ConfigurableEnvironment.class.isInstance(env)) {
+				// 类型转换
 				ConfigurableEnvironment configEnv = (ConfigurableEnvironment) env;
+				// 创建属性容器
 				LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+				// 向属性容器中放入spring.cloud.service-registry.auto-registration.enabled属性，属性值为false
 				map.put("spring.cloud.service-registry.auto-registration.enabled", false);
+				// 创建springCloudDiscoveryClient属性名称的属性源，数据值是属性容器
 				MapPropertySource propertySource = new MapPropertySource("springCloudDiscoveryClient", map);
+				// 向环境对象最后加入属性源
 				configEnv.getPropertySources().addLast(propertySource);
 			}
 
@@ -65,8 +77,12 @@ public class EnableDiscoveryClientImportSelector extends SpringFactoryImportSele
 		return imports;
 	}
 
+	/**
+	 * 确认是否已启用
+	 */
 	@Override
 	protected boolean isEnabled() {
+		// 获取环境对象中的spring.cloud.discovery.enabled数据
 		return getEnvironment().getProperty("spring.cloud.discovery.enabled", Boolean.class, Boolean.TRUE);
 	}
 

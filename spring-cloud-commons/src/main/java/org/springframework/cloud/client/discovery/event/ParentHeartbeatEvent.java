@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationEvent;
  * {@link HeartbeatEvent} that triggers this event is fired in the parent (bootstrap)
  * context.
  *
+ * 父心跳事件
  * @author Spencer Gibb
  */
 @SuppressWarnings("serial")

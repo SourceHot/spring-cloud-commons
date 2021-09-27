@@ -4,11 +4,11 @@
 	"https://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 <suppressions>
 	<suppress files=".*TestBootstrapConfiguration.*" checks="JavadocVariable"/>
-	<suppress files=".*BootstrapConfigurationTests.*" checks="JavadocStyle"/>
+<!--	<suppress files=".*BootstrapConfigurationTests.*" checks="JavadocStyle"/>-->
 	<suppress files=".*BootstrapConfigurationTests.*" checks="JavadocVariable"/>
 	<suppress files=".*TestHigherPriorityBootstrapConfiguration.*" checks="HideUtilityClassConstructor"/>
 	<suppress files=".*TestHigherPriorityBootstrapConfiguration.*" checks="JavadocVariable"/>
-	<suppress files=".*RefreshScopeConfigurationTests.*" checks="JavadocStyle"/>
+<!--	<suppress files=".*RefreshScopeConfigurationTests.*" checks="JavadocStyle"/>-->
 	<suppress files=".*RefreshScopeConfigurationTests.*" checks="JavadocMethod"/>
 	<suppress files=".*RefreshScopeConfigurationTests.*" checks="JavadocVariable"/>
 	<suppress files=".*RefreshAutoConfigurationTests.*" checks="JavadocVariable"/>

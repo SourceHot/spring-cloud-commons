@@ -22,12 +22,14 @@ import java.util.Map;
 /**
  * Represents an instance of a service in a discovery system.
  *
+ * 服务实例集合
  * @author Spencer Gibb
  * @author Tim Ysewyn
  */
 public interface ServiceInstance {
 
 	/**
+	 * 获取实例id
 	 * @return The unique instance ID as registered.
 	 */
 	default String getInstanceId() {
@@ -35,36 +37,43 @@ public interface ServiceInstance {
 	}
 
 	/**
+	 * 获取实例id
 	 * @return The service ID as registered.
 	 */
 	String getServiceId();
 
 	/**
+	 * 获取host
 	 * @return The hostname of the registered service instance.
 	 */
 	String getHost();
 
 	/**
+	 * 获取port
 	 * @return The port of the registered service instance.
 	 */
 	int getPort();
 
 	/**
+	 * 是否安全，即是否使用https
 	 * @return Whether the port of the registered service instance uses HTTPS.
 	 */
 	boolean isSecure();
 
 	/**
+	 * 获取uri对象
 	 * @return The service URI address.
 	 */
 	URI getUri();
 
 	/**
+	 * 获取元数据
 	 * @return The key / value pair metadata associated with the service instance.
 	 */
 	Map<String, String> getMetadata();
 
 	/**
+	 * 获取服务实例的方案
 	 * @return The scheme of the service instance.
 	 */
 	default String getScheme() {

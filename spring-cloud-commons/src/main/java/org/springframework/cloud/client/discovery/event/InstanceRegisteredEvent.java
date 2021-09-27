@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEvent;
  * Event to be published after the local service instance registers itself with a
  * discovery service.
  *
+ * 在本地服务实例向发现服务注册自身后要发布的事件
  * @author Spencer Gibb
  * @param <T> - type of configuration
  */

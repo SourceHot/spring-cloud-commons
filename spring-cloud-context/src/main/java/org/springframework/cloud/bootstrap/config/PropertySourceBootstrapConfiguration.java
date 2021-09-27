@@ -110,7 +110,8 @@ public class PropertySourceBootstrapConfiguration
 				if (p instanceof EnumerablePropertySource) {
 					EnumerablePropertySource<?> enumerable = (EnumerablePropertySource<?>) p;
 					sourceList.add(new BootstrapPropertySource<>(enumerable));
-				} else {
+				}
+				else {
 					sourceList.add(new SimpleBootstrapPropertySource(p));
 				}
 			}

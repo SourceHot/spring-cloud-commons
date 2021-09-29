@@ -36,15 +36,25 @@ import org.springframework.core.Ordered;
  */
 public class DiscoveryClientHealthIndicator
 		implements DiscoveryHealthIndicator, Ordered, ApplicationListener<InstanceRegisteredEvent<?>> {
-
+	/**
+	 * 服务发现器提供器
+	 */
 	private final ObjectProvider<DiscoveryClient> discoveryClient;
-
+	/**
+	 * 服务发现客户端关于监控检查的配置
+	 */
 	private final DiscoveryClientHealthIndicatorProperties properties;
-
+	/**
+	 * 日志
+	 */
 	private final Log log = LogFactory.getLog(DiscoveryClientHealthIndicator.class);
-
+	/**
+	 * 是否初始化完成
+	 */
 	private AtomicBoolean discoveryInitialized = new AtomicBoolean(false);
-
+	/**
+	 * 序号
+	 */
 	private int order = Ordered.HIGHEST_PRECEDENCE;
 
 	public DiscoveryClientHealthIndicator(ObjectProvider<DiscoveryClient> discoveryClient,
@@ -63,29 +73,38 @@ public class DiscoveryClientHealthIndicator
 	@Override
 	public Health health() {
 		Health.Builder builder = new Health.Builder();
-
+		// 如果已经初始化完成
 		if (this.discoveryInitialized.get()) {
 			try {
+				// 获取服务发现器
 				DiscoveryClient client = this.discoveryClient.getIfAvailable();
+				// 获取描述信息
 				String description = (this.properties.isIncludeDescription()) ? client.description() : "";
 
+				// 允许服务查询
 				if (properties.isUseServicesQuery()) {
+					// 获取服务名称集合
 					List<String> services = client.getServices();
+					// 设置status数据
 					builder.status(new Status("UP", description)).withDetail("services", services);
-				}
-				else {
+				} else {
+					// 探测
 					client.probe();
+					// 设置status数据
 					builder.status(new Status("UP", description));
 				}
 			}
 			catch (Exception e) {
 				this.log.error("Error", e);
+				// 构建器中设置异常信息
 				builder.down(e);
 			}
 		}
 		else {
+			// 设置status，数据为未知
 			builder.status(new Status(Status.UNKNOWN.getCode(), "Discovery Client not initialized"));
 		}
+		// 返回
 		return builder.build();
 	}
 

@@ -16,14 +16,8 @@
 
 package org.springframework.cloud.client.serviceregistry;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.PreDestroy;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.BeansException;
 import org.springframework.boot.web.context.ConfigurableWebServerApplicationContext;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
@@ -35,10 +29,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.PreDestroy;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Lifecycle methods that may be useful and common to {@link ServiceRegistry}
  * implementations.
- *
+ * <p>
  * TODO: Document the lifecycle.
  *
  * @param <R> Registration type passed to the {@link ServiceRegistry}.
@@ -48,21 +46,37 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 		implements AutoServiceRegistration, ApplicationContextAware, ApplicationListener<WebServerInitializedEvent> {
 
 	private static final Log logger = LogFactory.getLog(AbstractAutoServiceRegistration.class);
-
+	/**
+	 * 服务注册接口
+	 */
 	private final ServiceRegistry<R> serviceRegistry;
-
-	private boolean autoStartup = true;
-
-	private AtomicBoolean running = new AtomicBoolean(false);
-
-	private int order = 0;
-
+	/**
+	 * 是否需要自动启动
+	 */
+	private final boolean autoStartup = true;
+	/**
+	 * 是否处于运行状态
+	 */
+	private final AtomicBoolean running = new AtomicBoolean(false);
+	/**
+	 * 序号
+	 */
+	private final int order = 0;
+	/**
+	 * 端口
+	 */
+	private final AtomicInteger port = new AtomicInteger(0);
+	/**
+	 * 应用上下文
+	 */
 	private ApplicationContext context;
-
+	/**
+	 * 环境对象
+	 */
 	private Environment environment;
-
-	private AtomicInteger port = new AtomicInteger(0);
-
+	/**
+	 * 自动服务注册属性表
+	 */
 	private AutoServiceRegistrationProperties properties;
 
 	@Deprecated
@@ -71,7 +85,7 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 	}
 
 	protected AbstractAutoServiceRegistration(ServiceRegistry<R> serviceRegistry,
-			AutoServiceRegistrationProperties properties) {
+											  AutoServiceRegistrationProperties properties) {
 		this.serviceRegistry = serviceRegistry;
 		this.properties = properties;
 	}
@@ -88,13 +102,17 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 
 	@Deprecated
 	public void bind(WebServerInitializedEvent event) {
+		// 获取应用上下文
 		ApplicationContext context = event.getApplicationContext();
+		// 如果应用上下文类型是ConfigurableWebServerApplicationContext，并且服务命名空间是management需要跳过处理
 		if (context instanceof ConfigurableWebServerApplicationContext) {
 			if ("management".equals(((ConfigurableWebServerApplicationContext) context).getServerNamespace())) {
 				return;
 			}
 		}
+		// 设置端口
 		this.port.compareAndSet(0, event.getWebServer().getPort());
+		// 启动方法
 		this.start();
 	}
 
@@ -119,6 +137,7 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 	}
 
 	public void start() {
+		// 确认是否启动,如果未启动则跳过处理
 		if (!isEnabled()) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Discovery Lifecycle disabled. Not starting");
@@ -128,13 +147,20 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 
 		// only initialize if nonSecurePort is greater than 0 and it isn't already running
 		// because of containerPortInitializer below
+		// 确认是否处于运行状态，如果处于未运行状态处理
 		if (!this.running.get()) {
+			// 推送InstancePreRegisteredEvent事件
 			this.context.publishEvent(new InstancePreRegisteredEvent(this, getRegistration()));
+			// 注册
 			register();
+
+			// 管理服务是否应该注册，如果需要则进行管理服务注册
 			if (shouldRegisterManagement()) {
 				registerManagement();
 			}
+			// 推送InstanceRegisteredEvent事件
 			this.context.publishEvent(new InstanceRegisteredEvent<>(this, getConfiguration()));
+			// 设置启动标记
 			this.running.compareAndSet(false, true);
 		}
 

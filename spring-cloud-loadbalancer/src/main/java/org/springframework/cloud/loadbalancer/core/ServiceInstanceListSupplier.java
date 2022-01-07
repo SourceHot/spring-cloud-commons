@@ -27,6 +27,8 @@ import org.springframework.cloud.client.loadbalancer.Request;
 /**
  * A {@link Supplier} of lists of {@link ServiceInstance} objects.
  *
+ *
+ * 服务实例集合提供器
  * @author Olga Maciaszek-Sharma
  * @since 2.2.0
  */
@@ -34,6 +36,11 @@ public interface ServiceInstanceListSupplier extends Supplier<Flux<List<ServiceI
 
 	String getServiceId();
 
+	/**
+	 * 根据请求获取服务实例
+	 * @param request
+	 * @return
+	 */
 	default Flux<List<ServiceInstance>> get(Request request) {
 		return get();
 	}

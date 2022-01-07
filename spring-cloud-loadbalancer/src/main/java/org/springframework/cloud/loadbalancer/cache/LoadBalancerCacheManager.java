@@ -21,6 +21,7 @@ import org.springframework.cache.CacheManager;
 /**
  * A marker interface for Spring Cloud LoadBalancer-specific {@link CacheManager} beans.
  *
+ * 负载均衡相关的缓存管理器
  * @author Olga Maciaszek-Sharma
  * @since 2.2.0
  */

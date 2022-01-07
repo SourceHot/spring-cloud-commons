@@ -22,6 +22,7 @@ import org.springframework.http.HttpMethod;
  * Pluggable policy used to establish whether a given load-balanced call should be
  * retried.
  *
+ * 判断是否需要进行负载均衡策略的处理
  * @author Olga Maciaszek-Sharma
  * @since 3.0.0
  */
@@ -29,6 +30,7 @@ public interface LoadBalancerRetryPolicy {
 
 	/**
 	 * Return <code>true</code> to retry on the same service instance.
+	 * 是否可以在同一个服务实例上重试
 	 * @param context the context for the retry operation
 	 * @return true to retry on the same service instance
 	 */
@@ -36,6 +38,7 @@ public interface LoadBalancerRetryPolicy {
 
 	/**
 	 * Return <code>true</code> to retry on the next service instance.
+	 * 是否可以使用下一个服务实例重试
 	 * @param context the context for the retry operation
 	 * @return true to retry on the same service instance
 	 */
@@ -43,6 +46,7 @@ public interface LoadBalancerRetryPolicy {
 
 	/**
 	 * Return <code>true</code> to retry on the provided HTTP status code.
+	 * 判断输入的状态码是否可以重试
 	 * @param statusCode the HTTP status code
 	 * @return true to retry on the provided HTTP status code
 	 */
@@ -50,6 +54,8 @@ public interface LoadBalancerRetryPolicy {
 
 	/**
 	 * Return <code>true</code> to retry on the provided HTTP method.
+	 *
+	 * 判断输入的Http方法是否可以重试
 	 * @param method the HTTP request method
 	 * @return true to retry on the provided HTTP method
 	 */

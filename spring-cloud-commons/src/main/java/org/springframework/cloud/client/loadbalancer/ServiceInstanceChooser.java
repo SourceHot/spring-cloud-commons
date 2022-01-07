@@ -22,6 +22,7 @@ import org.springframework.cloud.client.ServiceInstance;
  * Implemented by classes which use a load balancer to choose a server to send a request
  * to.
  *
+ * 服务实例选择器
  * @author Ryan Baxter
  * @author Olga Maciaszek-Sharma
  */

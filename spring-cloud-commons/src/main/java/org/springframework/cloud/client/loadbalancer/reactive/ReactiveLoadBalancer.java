@@ -28,6 +28,7 @@ import org.springframework.cloud.client.loadbalancer.Response;
 /**
  * Reactive load balancer.
  *
+ * 响应式的负载均衡接口
  * @param <T> type of the response
  * @author Spencer Gibb
  * @author Olga Maciaszek-Sharma

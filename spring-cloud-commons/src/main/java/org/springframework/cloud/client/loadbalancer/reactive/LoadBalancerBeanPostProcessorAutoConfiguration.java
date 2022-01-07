@@ -31,12 +31,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * An auto-configuration that provides a {@link BeanPostProcessor} that allows the use of
- * a {@link LoadBalanced} {@link WebClient.Builder} with
- * {@link ReactorLoadBalancerExchangeFilterFunction} and {@link ReactiveLoadBalancer} used
- * under the hood. NOTE: This has been extracted to a separate configuration in order to
- * not impact instantiation and post-processing of other Reactor-LoadBalancer-related
- * beans.
+ * An auto-configuration that provides a {@link BeanPostProcessor} that allows the use of a {@link
+ * LoadBalanced} {@link WebClient.Builder} with {@link ReactorLoadBalancerExchangeFilterFunction}
+ * and {@link ReactiveLoadBalancer} used under the hood. NOTE: This has been extracted to a separate
+ * configuration in order to not impact instantiation and post-processing of other
+ * Reactor-LoadBalancer-related beans.
  *
  * @author Olga Maciaszek-Sharma
  * @since 2.2.0
@@ -48,8 +47,10 @@ public class LoadBalancerBeanPostProcessorAutoConfiguration {
 
 	@Bean
 	public LoadBalancerWebClientBuilderBeanPostProcessor loadBalancerWebClientBuilderBeanPostProcessor(
-			DeferringLoadBalancerExchangeFilterFunction deferringExchangeFilterFunction, ApplicationContext context) {
-		return new LoadBalancerWebClientBuilderBeanPostProcessor(deferringExchangeFilterFunction, context);
+			DeferringLoadBalancerExchangeFilterFunction deferringExchangeFilterFunction,
+			ApplicationContext context) {
+		return new LoadBalancerWebClientBuilderBeanPostProcessor(deferringExchangeFilterFunction,
+				context);
 	}
 
 	@Configuration(proxyBeanMethods = false)
@@ -60,7 +61,8 @@ public class LoadBalancerBeanPostProcessorAutoConfiguration {
 		@Primary
 		DeferringLoadBalancerExchangeFilterFunction<LoadBalancedExchangeFilterFunction> reactorDeferringLoadBalancerExchangeFilterFunction(
 				ObjectProvider<LoadBalancedExchangeFilterFunction> exchangeFilterFunctionProvider) {
-			return new DeferringLoadBalancerExchangeFilterFunction<>(exchangeFilterFunctionProvider);
+			return new DeferringLoadBalancerExchangeFilterFunction<>(
+					exchangeFilterFunctionProvider);
 		}
 
 	}

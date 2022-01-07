@@ -19,6 +19,8 @@ package org.springframework.cloud.client.loadbalancer;
 /**
  * Allows to define actions that should be carried out before and after load-balancing.
  *
+ *
+ * 负载均衡生命周期接口
  * @author Olga Maciaszek-Sharma
  */
 public interface LoadBalancerLifecycle<RC, RES, T> {
@@ -28,6 +30,8 @@ public interface LoadBalancerLifecycle<RC, RES, T> {
 	 * examples of possible implementations could comprise of verifying whether the
 	 * classes passed in parameters are exactly or extend the classes that this lifecycle
 	 * bean should process.
+	 *
+	 * 判断是否支持生命周期处理
 	 * @param requestContextClass The class of the {@link Request} <code>context</code>
 	 * @param responseClass The class of the {@link CompletionContext}
 	 * <code>clientResponse</code>
@@ -40,6 +44,7 @@ public interface LoadBalancerLifecycle<RC, RES, T> {
 
 	/**
 	 * A callback method executed before load-balancing.
+	 * 开始执行负载均衡处理之前的方法
 	 * @param request the {@link Request} that will be used by the LoadBalancer to select
 	 * a service instance
 	 */
@@ -48,6 +53,7 @@ public interface LoadBalancerLifecycle<RC, RES, T> {
 	/**
 	 * A callback method executed after a service instance has been selected, before
 	 * executing the actual load-balanced request.
+	 * 在负载均衡选择到服务实例后执行
 	 * @param request the {@link Request} that has been used by the LoadBalancer to select
 	 * a service instance
 	 * @param lbResponse the {@link Response} returned by the LoadBalancer
@@ -56,6 +62,7 @@ public interface LoadBalancerLifecycle<RC, RES, T> {
 
 	/**
 	 * A callback method executed after load-balancing.
+	 * 在负载均衡处理后执行
 	 * @param completionContext the {@link CompletionContext} containing data relevant to
 	 * the load-balancing and the response returned from the selected service instance
 	 */

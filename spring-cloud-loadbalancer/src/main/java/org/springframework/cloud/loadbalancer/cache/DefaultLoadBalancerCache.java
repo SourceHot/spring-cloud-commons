@@ -46,6 +46,9 @@ public class DefaultLoadBalancerCache extends AbstractValueAdaptingCache {
 
 	private final String name;
 
+	/**
+	 * 缓存容器
+	 */
 	private final ConcurrentMapWithTimedEviction<Object, Object> cache;
 
 	private final long evictMs;

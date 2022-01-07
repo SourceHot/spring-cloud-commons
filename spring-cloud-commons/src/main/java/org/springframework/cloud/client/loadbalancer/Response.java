@@ -19,6 +19,7 @@ package org.springframework.cloud.client.loadbalancer;
 /**
  * Response created for each request.
  *
+ * 响应标记接口
  * @param <T> type of the server
  * @author Spencer Gibb
  */

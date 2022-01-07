@@ -27,6 +27,7 @@ import static org.springframework.cloud.loadbalancer.core.CachingServiceInstance
  * A Spring Cloud LoadBalancer specific implementation of {@link CaffeineCacheManager}
  * that implements the {@link LoadBalancerCacheManager} marker interface.
  *
+ * 基于caffeine实现的缓存
  * @author Olga Maciaszek-Sharma
  * @since 2.2.0
  * @see <a href="https://github.com/ben-manes/caffeine>Caffeine</a>
@@ -35,12 +36,16 @@ import static org.springframework.cloud.loadbalancer.core.CachingServiceInstance
  */
 public class CaffeineBasedLoadBalancerCacheManager extends CaffeineCacheManager implements LoadBalancerCacheManager {
 
-	public CaffeineBasedLoadBalancerCacheManager(String cacheName, LoadBalancerCacheProperties properties) {
+	public CaffeineBasedLoadBalancerCacheManager(String cacheName,
+			LoadBalancerCacheProperties properties) {
+		// 设置缓存名称
 		super(cacheName);
+		// 如果spec不为空则进行设置
 		if (!StringUtils.isEmpty(properties.getCaffeine().getSpec())) {
 			setCacheSpecification(properties.getCaffeine().getSpec());
 		}
 		else {
+			// 初始化caffeine
 			setCaffeine(Caffeine.newBuilder().initialCapacity(properties.getCapacity())
 					.expireAfterWrite(properties.getTtl()).softValues());
 		}

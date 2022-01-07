@@ -19,6 +19,7 @@ package org.springframework.cloud.client.loadbalancer;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * RestTemplate对象定制接口
  * @author Spencer Gibb
  */
 public interface RestTemplateCustomizer {

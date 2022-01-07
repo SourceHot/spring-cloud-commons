@@ -19,6 +19,7 @@ package org.springframework.cloud.client.loadbalancer;
 /**
  * Allows setting and retrieving request start time.
  *
+ * 请求时间上下文
  * @author Olga Maciaszek-Sharma
  * @since 3.0.0
  */

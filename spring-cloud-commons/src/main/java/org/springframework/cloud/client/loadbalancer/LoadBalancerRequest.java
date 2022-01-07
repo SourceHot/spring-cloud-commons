@@ -22,6 +22,8 @@ import org.springframework.cloud.client.ServiceInstance;
  * Simple interface used by LoadBalancerClient to apply metrics or pre and post actions
  * around load balancer requests.
  *
+ *
+ * 负载均衡请求对象
  * @param <T> type of the response
  * @author Spencer Gibb
  */

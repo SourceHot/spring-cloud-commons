@@ -26,6 +26,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  * See original
  * {@link org.springframework.boot.web.reactive.function.client.WebClientCustomizer}
  *
+ * Web客户端定制器
  * @author Brian Clozel
  * @since 2.1.0
  */

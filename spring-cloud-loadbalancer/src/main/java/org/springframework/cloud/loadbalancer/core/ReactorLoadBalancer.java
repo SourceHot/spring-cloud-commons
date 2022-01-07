@@ -25,6 +25,7 @@ import org.springframework.cloud.client.loadbalancer.reactive.ReactiveLoadBalanc
 /**
  * A Reactor based implementation of {@link ReactiveLoadBalancer}.
  *
+ * 基于reactor的负载均衡接口
  * @param <T> - type of the response
  * @author Spencer Gibb
  */

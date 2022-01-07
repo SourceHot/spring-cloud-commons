@@ -22,6 +22,7 @@ import org.springframework.cloud.client.ServiceInstance;
  * An adapter class that allows creating {@link Request} objects from previously
  * {@link LoadBalancerRequest} objects.
  *
+ * 负载均衡下的请求适配器对象
  * @author Olga Maciaszek-Sharma
  * @since 3.0.0
  */

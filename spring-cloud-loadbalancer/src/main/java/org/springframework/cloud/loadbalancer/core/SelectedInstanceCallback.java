@@ -22,6 +22,7 @@ import org.springframework.cloud.client.ServiceInstance;
  * A callback interface that allows to pass the selected service instance data from the
  * LoadBalancer.
  *
+ * 服务实例选择回调接口
  * @author Olga Maciaszek-Sharma
  * @since 2.2.7
  */
@@ -29,6 +30,7 @@ public interface SelectedInstanceCallback {
 
 	/**
 	 * Passes the selected {@link ServiceInstance} as an argument.
+	 * 对选择的服务实例进行操作
 	 * @param serviceInstance that has been selected
 	 */
 	void selectedServiceInstance(ServiceInstance serviceInstance);

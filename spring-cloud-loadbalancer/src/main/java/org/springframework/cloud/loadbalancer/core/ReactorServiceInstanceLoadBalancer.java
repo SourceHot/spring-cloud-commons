@@ -22,6 +22,7 @@ import org.springframework.cloud.client.ServiceInstance;
  * A marker interface for {@link ReactorLoadBalancer} that allows selecting
  * {@link ServiceInstance} objects.
  *
+ * 基于reactor的服务实例负载均衡器接口
  * @author Olga Maciaszek-Sharma
  * @since 2.2.0
  */

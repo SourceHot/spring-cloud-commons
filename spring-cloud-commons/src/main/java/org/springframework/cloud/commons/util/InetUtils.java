@@ -61,6 +61,7 @@ public class InetUtils implements Closeable {
 	}
 
 	public HostInfo findFirstNonLoopbackHostInfo() {
+		// 解析本机ip地址
 		InetAddress address = findFirstNonLoopbackAddress();
 		if (address != null) {
 			return convertAddress(address);

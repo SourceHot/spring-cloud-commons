@@ -19,6 +19,7 @@ package org.springframework.cloud.client.loadbalancer;
 import org.springframework.web.client.AsyncRestTemplate;
 
 /**
+ * AsyncRestTemplate对象自定义处理器
  * @author Rob Worsnop
  */
 public interface AsyncRestTemplateCustomizer {

@@ -23,6 +23,7 @@ import org.springframework.retry.backoff.NoBackOffPolicy;
 /**
  * Factory class used to customize the retry functionality throughout Spring Cloud.
  *
+ * 负载均衡重试工厂
  * @author Ryan Baxter
  */
 public interface LoadBalancedRetryFactory {

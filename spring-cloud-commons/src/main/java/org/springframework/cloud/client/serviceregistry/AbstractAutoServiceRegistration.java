@@ -46,34 +46,42 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 		implements AutoServiceRegistration, ApplicationContextAware, ApplicationListener<WebServerInitializedEvent> {
 
 	private static final Log logger = LogFactory.getLog(AbstractAutoServiceRegistration.class);
+
 	/**
 	 * 服务注册接口
 	 */
 	private final ServiceRegistry<R> serviceRegistry;
+
 	/**
 	 * 是否需要自动启动
 	 */
 	private final boolean autoStartup = true;
+
 	/**
 	 * 是否处于运行状态
 	 */
 	private final AtomicBoolean running = new AtomicBoolean(false);
+
 	/**
 	 * 序号
 	 */
 	private final int order = 0;
+
 	/**
 	 * 端口
 	 */
 	private final AtomicInteger port = new AtomicInteger(0);
+
 	/**
 	 * 应用上下文
 	 */
 	private ApplicationContext context;
+
 	/**
 	 * 环境对象
 	 */
 	private Environment environment;
+
 	/**
 	 * 自动服务注册属性表
 	 */
@@ -85,7 +93,7 @@ public abstract class AbstractAutoServiceRegistration<R extends Registration>
 	}
 
 	protected AbstractAutoServiceRegistration(ServiceRegistry<R> serviceRegistry,
-											  AutoServiceRegistrationProperties properties) {
+			AutoServiceRegistrationProperties properties) {
 		this.serviceRegistry = serviceRegistry;
 		this.properties = properties;
 	}

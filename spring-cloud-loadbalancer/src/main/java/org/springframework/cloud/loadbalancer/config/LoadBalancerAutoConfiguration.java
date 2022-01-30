@@ -52,12 +52,21 @@ public class LoadBalancerAutoConfiguration {
 		this.configurations = configurations;
 	}
 
+	/**
+	 * 设置zone
+	 * @param environment
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public LoadBalancerZoneConfig zoneConfig(Environment environment) {
 		return new LoadBalancerZoneConfig(environment.getProperty("spring.cloud.loadbalancer.zone"));
 	}
 
+	/**
+	 * 负载均衡客户端工厂
+	 * @return
+	 */
 	@ConditionalOnMissingBean
 	@Bean
 	public LoadBalancerClientFactory loadBalancerClientFactory() {

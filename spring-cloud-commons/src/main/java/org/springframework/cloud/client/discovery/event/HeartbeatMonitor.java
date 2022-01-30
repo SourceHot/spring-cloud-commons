@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * determine if there has been a change in state.
  *
  * 心跳监控器
+ *
  * @author Dave Syer
  */
 public class HeartbeatMonitor {

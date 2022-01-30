@@ -139,8 +139,10 @@ public abstract class NamedContextFactory<C extends NamedContextFactory.Specific
 	}
 
 	public <T> T getInstance(String name, Class<T> type) {
+		// 根据名称获取上下文
 		AnnotationConfigApplicationContext context = getContext(name);
 		try {
+			// 从上下文中返回实例
 			return context.getBean(type);
 		}
 		catch (NoSuchBeanDefinitionException e) {

@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationEvent;
  * context.
  *
  * 父心跳事件
+ *
  * @author Spencer Gibb
  */
 @SuppressWarnings("serial")

@@ -45,14 +45,17 @@ public abstract class SpringFactoryImportSelector<T>
 		implements DeferredImportSelector, BeanClassLoaderAware, EnvironmentAware {
 
 	private final Log log = LogFactory.getLog(SpringFactoryImportSelector.class);
+
 	/**
 	 * 类加载器
 	 */
 	private ClassLoader beanClassLoader;
+
 	/**
 	 * 注解类
 	 */
 	private Class<T> annotationClass;
+
 	/**
 	 * 环境对象
 	 */

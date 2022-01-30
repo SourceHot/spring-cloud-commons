@@ -66,49 +66,69 @@ public class MicrometerStatsLoadBalancerLifecycle implements LoadBalancerLifecyc
 
 	@Override
 	public void onStartRequest(Request<Object> request, Response<ServiceInstance> lbResponse) {
+		// 判断上下文类型是否是TimedRequestContext
 		if (request.getContext() instanceof TimedRequestContext) {
 			((TimedRequestContext) request.getContext()).setRequestStartTime(System.nanoTime());
 		}
+		// 如果请求中没有服务对象将直接结束处理
 		if (!lbResponse.hasServer()) {
 			return;
 		}
+		// 从请求中获取服务实例
 		ServiceInstance serviceInstance = lbResponse.getServer();
-		AtomicLong activeRequestsCounter = activeRequestsPerInstance.computeIfAbsent(serviceInstance, instance -> {
-			AtomicLong createdCounter = new AtomicLong();
-			Gauge.builder("loadbalancer.requests.active", () -> createdCounter)
-					.tags(buildServiceInstanceTags(serviceInstance)).register(meterRegistry);
-			return createdCounter;
-		});
+		// 置入数据缓存
+		AtomicLong activeRequestsCounter =
+				activeRequestsPerInstance.computeIfAbsent(serviceInstance, instance -> {
+					AtomicLong createdCounter = new AtomicLong();
+					Gauge.builder("loadbalancer.requests.active", () -> createdCounter)
+							.tags(buildServiceInstanceTags(serviceInstance))
+							.register(meterRegistry);
+					return createdCounter;
+				});
+		// 累加1
 		activeRequestsCounter.incrementAndGet();
 	}
 
 	@Override
 	public void onComplete(CompletionContext<Object, ServiceInstance, Object> completionContext) {
+		// 获取当前时间
 		long requestFinishedTimestamp = System.nanoTime();
+		// 上下文状态是否是DISCARD
 		if (CompletionContext.Status.DISCARD.equals(completionContext.status())) {
-			Counter.builder("loadbalancer.requests.discard").tags(buildDiscardedRequestTags(completionContext))
+			// micrometer相关操作
+			Counter.builder("loadbalancer.requests.discard")
+					.tags(buildDiscardedRequestTags(completionContext))
 					.register(meterRegistry).increment();
 			return;
 		}
+		// 获取服务实例
 		ServiceInstance serviceInstance = completionContext.getLoadBalancerResponse().getServer();
+		// 获取服务实例的使用次数
 		AtomicLong activeRequestsCounter = activeRequestsPerInstance.get(serviceInstance);
+		// 使用次数不为空则减一
 		if (activeRequestsCounter != null) {
 			activeRequestsCounter.decrementAndGet();
 		}
+		// 获取上下文
 		Object loadBalancerRequestContext = completionContext.getLoadBalancerRequest().getContext();
+		// 对上下文中的时间进行检查
 		if (requestHasBeenTimed(loadBalancerRequestContext)) {
+			// 如果处理状态是失败
 			if (CompletionContext.Status.FAILED.equals(completionContext.status())) {
-				Timer.builder("loadbalancer.requests.failed").tags(buildFailedRequestTags(completionContext))
+				Timer.builder("loadbalancer.requests.failed")
+						.tags(buildFailedRequestTags(completionContext))
 						.register(meterRegistry)
 						.record(requestFinishedTimestamp
-								- ((TimedRequestContext) loadBalancerRequestContext).getRequestStartTime(),
+										- ((TimedRequestContext) loadBalancerRequestContext).getRequestStartTime(),
 								TimeUnit.NANOSECONDS);
 				return;
 			}
-			Timer.builder("loadbalancer.requests.success").tags(buildSuccessRequestTags(completionContext))
+			// 非失败状态
+			Timer.builder("loadbalancer.requests.success")
+					.tags(buildSuccessRequestTags(completionContext))
 					.register(meterRegistry)
 					.record(requestFinishedTimestamp
-							- ((TimedRequestContext) loadBalancerRequestContext).getRequestStartTime(),
+									- ((TimedRequestContext) loadBalancerRequestContext).getRequestStartTime(),
 							TimeUnit.NANOSECONDS);
 		}
 	}

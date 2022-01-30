@@ -17,8 +17,8 @@
 package org.springframework.cloud.client.serviceregistry;
 
 /**
- * Contract to register and deregister instances with a Service Registry.
- * 服务注册
+ * Contract to register and deregister instances with a Service Registry. 服务注册
+ *
  * @param <R> registration meta data
  * @author Spencer Gibb
  * @since 1.2.0
@@ -27,29 +27,25 @@ public interface ServiceRegistry<R extends Registration> {
 
 	/**
 	 * Registers the registration. A registration typically has information about an
-	 * instance, such as its hostname and port.
-	 * 进行实例注册
+	 * instance, such as its hostname and port. 进行实例注册
 	 * @param registration registration meta data
 	 */
 	void register(R registration);
 
 	/**
-	 * Deregisters the registration.
-	 * 注销实例
+	 * Deregisters the registration. 注销实例
 	 * @param registration registration meta data
 	 */
 	void deregister(R registration);
 
 	/**
-	 * Closes the ServiceRegistry. This is a lifecycle method.
-	 * 关闭服务注册
+	 * Closes the ServiceRegistry. This is a lifecycle method. 关闭服务注册
 	 */
 	void close();
 
 	/**
 	 * Sets the status of the registration. The status values are determined by the
-	 * individual implementations.
-	 * 设置服务状态
+	 * individual implementations. 设置服务状态
 	 * @param registration The registration to update.
 	 * @param status The status to set.
 	 * @see org.springframework.cloud.client.serviceregistry.endpoint.ServiceRegistryEndpoint
@@ -57,8 +53,7 @@ public interface ServiceRegistry<R extends Registration> {
 	void setStatus(R registration, String status);
 
 	/**
-	 * Gets the status of a particular registration.
-	 * 获取服务状态
+	 * Gets the status of a particular registration. 获取服务状态
 	 * @param registration The registration to query.
 	 * @param <T> The type of the status.
 	 * @return The status of the registration.

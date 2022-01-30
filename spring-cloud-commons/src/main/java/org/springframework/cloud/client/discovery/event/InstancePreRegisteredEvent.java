@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationEvent;
  * An event to fire before a service is registered.
  *
  * 在注册服务之前触发的事件
+ *
  * @author Ryan Baxter
  */
 public class InstancePreRegisteredEvent extends ApplicationEvent {

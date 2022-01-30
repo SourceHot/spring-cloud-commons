@@ -36,22 +36,27 @@ import org.springframework.core.Ordered;
  */
 public class DiscoveryClientHealthIndicator
 		implements DiscoveryHealthIndicator, Ordered, ApplicationListener<InstanceRegisteredEvent<?>> {
+
 	/**
 	 * 服务发现器提供器
 	 */
 	private final ObjectProvider<DiscoveryClient> discoveryClient;
+
 	/**
 	 * 服务发现客户端关于监控检查的配置
 	 */
 	private final DiscoveryClientHealthIndicatorProperties properties;
+
 	/**
 	 * 日志
 	 */
 	private final Log log = LogFactory.getLog(DiscoveryClientHealthIndicator.class);
+
 	/**
 	 * 是否初始化完成
 	 */
 	private AtomicBoolean discoveryInitialized = new AtomicBoolean(false);
+
 	/**
 	 * 序号
 	 */
@@ -87,7 +92,8 @@ public class DiscoveryClientHealthIndicator
 					List<String> services = client.getServices();
 					// 设置status数据
 					builder.status(new Status("UP", description)).withDetail("services", services);
-				} else {
+				}
+				else {
 					// 探测
 					client.probe();
 					// 设置status数据

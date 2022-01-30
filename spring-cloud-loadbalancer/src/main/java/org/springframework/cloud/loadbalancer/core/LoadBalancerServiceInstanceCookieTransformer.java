@@ -45,18 +45,26 @@ public class LoadBalancerServiceInstanceCookieTransformer implements LoadBalance
 
 	@Override
 	public HttpRequest transformRequest(HttpRequest request, ServiceInstance instance) {
+		// 服务实例为空直接返回原始请求对象
 		if (instance == null) {
 			return request;
 		}
+		// 获取服务实例id对应的cookie名称
 		String instanceIdCookieName = stickySessionProperties.getInstanceIdCookieName();
+		// 如果instanceIdCookieName为空则返回原始请求对象
 		if (!StringUtils.hasText(instanceIdCookieName)) {
 			return request;
 		}
+		// 获取原始请求中的头信息
 		HttpHeaders headers = request.getHeaders();
-		List<String> cookieHeaders = new ArrayList<>(request.getHeaders().getOrEmpty(HttpHeaders.COOKIE));
-		String serviceInstanceCookie = new HttpCookie(instanceIdCookieName, instance.getInstanceId()).toString();
+		// 将cookie信息放入到原始请求头信息中
+		List<String> cookieHeaders =
+				new ArrayList<>(request.getHeaders().getOrEmpty(HttpHeaders.COOKIE));
+		String serviceInstanceCookie =
+				new HttpCookie(instanceIdCookieName, instance.getInstanceId()).toString();
 		cookieHeaders.add(serviceInstanceCookie);
 		headers.put(HttpHeaders.COOKIE, cookieHeaders);
+		// 返回原始请求
 		return request;
 	}
 

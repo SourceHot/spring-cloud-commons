@@ -51,6 +51,12 @@ import org.springframework.web.client.RestTemplate;
 @ConditionalOnClass(RestTemplate.class)
 public class BlockingLoadBalancerClientAutoConfiguration {
 
+	/**
+	 * 负载均衡客户端
+	 * @param loadBalancerClientFactory
+	 * @param properties
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnBean(LoadBalancerClientFactory.class)
 	@ConditionalOnMissingBean
@@ -59,6 +65,11 @@ public class BlockingLoadBalancerClientAutoConfiguration {
 		return new BlockingLoadBalancerClient(loadBalancerClientFactory, properties);
 	}
 
+	/**
+	 * cookie转换器
+	 * @param properties
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnProperty(value = "spring.cloud.loadbalancer.sticky-session.add-service-instance-cookie",
 			havingValue = "true")
@@ -73,6 +84,11 @@ public class BlockingLoadBalancerClientAutoConfiguration {
 	@EnableConfigurationProperties(LoadBalancerProperties.class)
 	protected static class BlockingLoadBalancerRetryConfig {
 
+		/**
+		 * 负载均衡重试工厂
+		 * @param properties
+		 * @return
+		 */
 		@Bean
 		@ConditionalOnMissingBean
 		LoadBalancedRetryFactory loadBalancedRetryFactory(LoadBalancerProperties properties) {

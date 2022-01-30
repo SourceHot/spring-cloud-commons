@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationEvent;
  * in the service catalog.
  *
  * 心跳事件
+ *
  * @author Spencer Gibb
  * @author Dave Syer
  */

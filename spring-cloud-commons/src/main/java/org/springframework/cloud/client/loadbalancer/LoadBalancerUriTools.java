@@ -93,18 +93,27 @@ public final class LoadBalancerUriTools {
 	}
 
 	private static URI doReconstructURI(ServiceInstance serviceInstance, URI original) {
+		// 从服务实例中获取host
 		String host = serviceInstance.getHost();
+		// 从服务实例中获取方案
 		String scheme = Optional.ofNullable(serviceInstance.getScheme())
 				.orElse(computeScheme(original, serviceInstance));
+		// 从服务实例中获取端口
 		int port = computePort(serviceInstance.getPort(), scheme);
 
+		// 判断host和参数original中的host是否相同
+		// 判断端口和参数original中的端口是否相同
+		// 判断方案和参数original中的方案是否相同
 		if (Objects.equals(host, original.getHost()) && port == original.getPort()
 				&& Objects.equals(scheme, original.getScheme())) {
 			return original;
 		}
 
+		// 获取是否需要编码
 		boolean encoded = containsEncodedParts(original);
-		return UriComponentsBuilder.fromUri(original).scheme(scheme).host(host).port(port).build(encoded).toUri();
+		// 组装新的URI对象
+		return UriComponentsBuilder.fromUri(original).scheme(scheme).host(host).port(port)
+				.build(encoded).toUri();
 	}
 
 	private static String computeScheme(URI original, ServiceInstance serviceInstance) {

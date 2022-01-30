@@ -22,7 +22,8 @@ import java.util.Map;
 /**
  * Represents an instance of a service in a discovery system.
  *
- * 服务实例集合
+ * 服务实例
+ *
  * @author Spencer Gibb
  * @author Tim Ysewyn
  */

@@ -58,18 +58,25 @@ public class RandomLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Mono<Response<ServiceInstance>> choose(Request request) {
+		// 获取服务实例提供器
 		ServiceInstanceListSupplier supplier = serviceInstanceListSupplierProvider
 				.getIfAvailable(NoopServiceInstanceListSupplier::new);
+		// 循环比对从中挑选一个
 		return supplier.get(request).next()
 				.map(serviceInstances -> processInstanceResponse(supplier, serviceInstances));
 	}
 
 	private Response<ServiceInstance> processInstanceResponse(ServiceInstanceListSupplier supplier,
 			List<ServiceInstance> serviceInstances) {
+		// 随机选择服务实例
 		Response<ServiceInstance> serviceInstanceResponse = getInstanceResponse(serviceInstances);
+		// 判断类型和是否存在服务
 		if (supplier instanceof SelectedInstanceCallback && serviceInstanceResponse.hasServer()) {
-			((SelectedInstanceCallback) supplier).selectedServiceInstance(serviceInstanceResponse.getServer());
+			// 对选择的服务实例进行操作
+			((SelectedInstanceCallback) supplier).selectedServiceInstance(
+					serviceInstanceResponse.getServer());
 		}
+		// 返回结果
 		return serviceInstanceResponse;
 	}
 
@@ -81,9 +88,7 @@ public class RandomLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 			return new EmptyResponse();
 		}
 		int index = ThreadLocalRandom.current().nextInt(instances.size());
-
 		ServiceInstance instance = instances.get(index);
-
 		return new DefaultResponse(instance);
 	}
 

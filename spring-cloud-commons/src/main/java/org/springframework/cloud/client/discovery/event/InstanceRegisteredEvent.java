@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationEvent;
  * discovery service.
  *
  * 在本地服务实例向发现服务注册自身后要发布的事件
+ *
  * @author Spencer Gibb
  * @param <T> - type of configuration
  */

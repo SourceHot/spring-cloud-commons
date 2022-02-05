@@ -46,6 +46,7 @@ public class LoadBalancerClientConfigurationRegistrar implements ImportBeanDefin
 
 	private static void registerClientConfiguration(BeanDefinitionRegistry registry, Object name,
 			Object configuration) {
+		// 构造bean定义，构造标准是LoadBalancerClientSpecification类
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder
 				.genericBeanDefinition(LoadBalancerClientSpecification.class);
 		builder.addConstructorArgValue(name);
@@ -54,25 +55,33 @@ public class LoadBalancerClientConfigurationRegistrar implements ImportBeanDefin
 	}
 
 	@Override
-	public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
-		Map<String, Object> attrs = metadata.getAnnotationAttributes(LoadBalancerClients.class.getName(), true);
+	public void registerBeanDefinitions(AnnotationMetadata metadata,
+										BeanDefinitionRegistry registry) {
+		// 读取LoadBalancerClients注解信息
+		Map<String, Object> attrs =
+				metadata.getAnnotationAttributes(LoadBalancerClients.class.getName(), true);
+		// 如果注解不为空并且value属性存在
 		if (attrs != null && attrs.containsKey("value")) {
+			// 提取value属性
 			AnnotationAttributes[] clients = (AnnotationAttributes[]) attrs.get("value");
+			// 循环value属性进行注册
 			for (AnnotationAttributes client : clients) {
-				registerClientConfiguration(registry, getClientName(client), client.get("configuration"));
+				// 注册客户端配置
+				registerClientConfiguration(registry, getClientName(client),
+						client.get("configuration"));
 			}
 		}
 		if (attrs != null && attrs.containsKey("defaultConfiguration")) {
 			String name;
 			if (metadata.hasEnclosingClass()) {
 				name = "default." + metadata.getEnclosingClassName();
-			}
-			else {
+			} else {
 				name = "default." + metadata.getClassName();
 			}
 			registerClientConfiguration(registry, name, attrs.get("defaultConfiguration"));
 		}
-		Map<String, Object> client = metadata.getAnnotationAttributes(LoadBalancerClient.class.getName(), true);
+		Map<String, Object> client =
+				metadata.getAnnotationAttributes(LoadBalancerClient.class.getName(), true);
 		String name = getClientName(client);
 		if (name != null) {
 			registerClientConfiguration(registry, name, client.get("configuration"));

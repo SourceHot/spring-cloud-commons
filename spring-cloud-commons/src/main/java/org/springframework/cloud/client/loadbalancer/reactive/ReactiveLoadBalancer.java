@@ -37,11 +37,13 @@ public interface ReactiveLoadBalancer<T> {
 
 	/**
 	 * Default implementation of a request.
+	 * 默认请求
 	 */
 	Request<DefaultRequestContext> REQUEST = new DefaultRequest<>();
 
 	/**
 	 * Choose the next server based on the load balancing algorithm.
+	 * 选择服务实例
 	 * @param request - incoming request
 	 * @return publisher for the response
 	 */
@@ -54,6 +56,11 @@ public interface ReactiveLoadBalancer<T> {
 
 	interface Factory<T> {
 
+		/**
+		 * 获取实例
+		 * @param serviceId
+		 * @return
+		 */
 		ReactiveLoadBalancer<T> getInstance(String serviceId);
 
 		/**
